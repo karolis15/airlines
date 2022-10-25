@@ -1,16 +1,18 @@
 <?php
 include "database.php";
+$id = $_get['id'];
+
 
 if(isset($_POST['submit'])) {
     $airline = $_POST['airline'];
     $country = $_POST['country'];
 
-    $sql = "INSERT INTO `airlines`(`id`, `name`, `country`) VALUES (NULL,'$airline','$country')";
+    $sql = "UPDATE `airlines` SET `name`='$name',`country`='$country',`location`='$location',`airlines`='$airlines' WHERE id=$id";
 
     $result = mysqli_query($conn, $sql);
 
     if($result) {
-        header("/* Location: index.php?msg=New record created successfully */");
+        header("/* Location: index.php?msg=Updated successfully */");
     }
     else {
         echo "Failed: " . mysqli_error($conn);
@@ -39,24 +41,29 @@ if(isset($_POST['submit'])) {
     </nav>
     <div class="container">
         <div class="text-center mb-4">
-            <h3>New Airline</h3>
+            <h3>Edit Airline</h3>
             <p class="text-muted">Complete the form to add a new airline</p>
         </div>
+
+        <?php
+        $sql = "SELECT * FROM `crud` WHERE id = $id LIMIT 1";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        ?>
+
         <div class="container d-flex justify-content-center">
             <form action="" method="post" style="width:50vw; min-width:300px;">
-        <div class="row">
+        <div class="row mb-3">
             <div class="col">
                 <label class="form-label">Name of airline</label>
-                <input type="text" class="form-control" name="airline" placeholder="Airline">
+                <input type="text" class="form-control" name="airline" value="<?php echo $row['name'] ?>">
             </div>
-
-
 
 
 
         </div>
         <div class="">
-        <select class="form-select" name="country" aria-label="Default select example">
+        <select class="form-select" name="country" aria-label="Default select example" value="<?php echo $row['country'] ?>">>
   <option selected>Select country</option>
   <option value="1">One</option>
   <option value="2">Two</option>
@@ -65,7 +72,7 @@ if(isset($_POST['submit'])) {
 </div>
         <div>
             <!-- <button type="submit" class="btn btn-success" name="submit" href="index.php">Save</button> -->
-            <a href="index.php" class="btn btn-success" name="submit">Create</a>
+            <a href="index.php" class="btn btn-success" name="submit">Update</a>
             <a href="index.php" class="btn btn-danger">Cancel</a>
         </div>
         </form>
